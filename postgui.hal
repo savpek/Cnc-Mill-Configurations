@@ -40,3 +40,4 @@ net tool-change-request     iocontrol.0.tool-change       =>  spindle-driver.new
 net tool-change-confirmed   iocontrol.0.tool-changed      <=  spindle-driver.tool-changed
 net tool-number             iocontrol.0.tool-prep-number  =>  spindle-driver.new-tool-number
 net spindle-vel-cmd        	=> spindle-driver.set-speed-rpm
+net coolant-flood     		=> spindle-driver.flood

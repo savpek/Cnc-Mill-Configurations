@@ -112,10 +112,9 @@ Exepted:
 			self.disable()
 	
 	def set_flood_on(self):
-		__try_send("O2 1")
-		pass
+		self.send_cmd("O2 1")
 	def set_flood_off(self):
-		pass
+		self.send_cmd("O2 0")
 	
 	# This disables drive so that enabling it requires
 	# physical button check before drive can be enabled again.
@@ -159,12 +158,21 @@ time.sleep(5)
 spindle.set_speed(0, 0)
 spindle.hard_disable()
 
+flood_last_state == False
 
 while True:
 	# IF speed have changed, set new speed.		
 	if current_speed_set != halc['set-speed-rpm']:
 		spindle.set_speed(halc['set-speed-rpm'], current_speed_set)
 		current_speed_set = halc['set-speed-rpm']
+	
+	if halc['flood'] == True and flood_last_state == False:
+		spindle.set_flood_on()
+		flood_last_state = True
+		
+	if halc['flood'] == False and flood_last_state == True:
+		spindle.set_flood_off()
+		flood_last_state = False
 	
 	if halc['new-tool-change'] == True:
 		spindle.set_speed(0,current_speed_set)
@@ -179,8 +187,7 @@ while True:
 		halc['tool-changed'] = True
 		time.sleep(0.5)
 		halc['tool-changed'] = False
-		
-		
+			
 	time.sleep(0.5)
 
 spindle.serialHook.close()

@@ -1,4 +1,0 @@
-# Load S620 driver program from directory.
-loadusr -Wn s620 /home/cnc/Desktop/EMC_MACHINE_FILES/s620_ctrl.py
-
-aaaaaaa
