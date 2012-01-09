@@ -1,0 +1,26 @@
+# Include your customized HAL commands here
+# The commands in this file are run after the AXIS GUI (including PyVCP panel) starts
+
+#
+# Following is for "Savpek Electronics Jogwheel".
+#
+loadusr -Wn savpek-jogwheel /home/cnc/Desktop/EMC_MACHINE_FILES/savpek_jogwheel.py
+
+net savpek-jogwheel.jog.a.speed-signal savpek-jogwheel.jog.speed <=> halui.jog-speed 
+
+# Controls emergency stop from handcontroller.
+net savpek-jogwheel.estop.act-signal savpek-jogwheel.jog.estop.activate <=> halui.estop.activate
+net savpek-jogwheel.estop.reset-signal savpek-jogwheel.jog.estop.reset <=> halui.estop.reset
+
+# Set machine on.
+net savpek-jogwheel.machine-on-signal savpek-jogwheel.jog.machine-on <=> halui.machine.on
+
+# Turnaround +/- logic in here, since emc uses +/- directions looked up from
+# from spindle wievpoint.
+
+net savpek-jogwheel.jog.x.plus-signal savpek-jogwheel.jog.x.plus <=> halui.jog.0.minus 
+net savpek-jogwheel.jog.x.minus-signal savpek-jogwheel.jog.x.minus <=> halui.jog.0.plus
+net savpek-jogwheel.jog.y.plus-signal savpek-jogwheel.jog.y.plus <=> halui.jog.1.minus
+net savpek-jogwheel.jog.y.minus-signal savpek-jogwheel.jog.y.minus <=> halui.jog.1.plus
+net savpek-jogwheel.jog.z.plus-signal savpek-jogwheel.jog.z.plus <=> halui.jog.2.plus
+net savpek-jogwheel.jog.z.minus-signal savpek-jogwheel.jog.z.minus <=> halui.jog.2.minus

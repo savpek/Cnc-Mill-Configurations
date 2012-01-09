@@ -1,0 +1,42 @@
+#
+# DIY JOGWHEEL!!!
+#
+loadusr -Wn savpek-jogwheel /home/cnc/Desktop/EMC_MACHINE_FILES/savpek_jogwheel.py
+
+net savpek-jogwheel.jog.a.speed-signal savpek-jogwheel.jog.speed <=> halui.jog-speed 
+
+# Controls emergency stop from handcontroller.
+net savpek-jogwheel.estop.act-signal savpek-jogwheel.jog.estop.activate <=> halui.estop.activate
+net savpek-jogwheel.estop.reset-signal savpek-jogwheel.jog.estop.reset <=> halui.estop.reset
+
+# Set machine on.
+#net savpek-jogwheel.machine-on-signal savpek-jogwheel.jog.machine-on <=> halui.machine.on
+
+# Turnaround +/- logic in here, since emc uses +/- directions looked up from
+# from spindle viewpoint.
+
+net savpek-jogwheel.jog.x.plus-signal savpek-jogwheel.jog.x.plus <=> halui.jog.0.minus 
+net savpek-jogwheel.jog.x.minus-signal savpek-jogwheel.jog.x.minus <=> halui.jog.0.plus
+net savpek-jogwheel.jog.y.plus-signal savpek-jogwheel.jog.y.plus <=> halui.jog.1.minus
+net savpek-jogwheel.jog.y.minus-signal savpek-jogwheel.jog.y.minus <=> halui.jog.1.plus
+net savpek-jogwheel.jog.z.plus-signal savpek-jogwheel.jog.z.plus <=> halui.jog.2.plus
+net savpek-jogwheel.jog.z.minus-signal savpek-jogwheel.jog.z.minus <=> halui.jog.2.minus
+
+# Map homing buttons to halui.
+net savpek-jogwheel.jog.x.home-signal savpek-jogwheel.jog.x.home <=> halui.joint.0.home 
+net savpek-jogwheel.jog.y.home-signal savpek-jogwheel.jog.y.home <=> halui.joint.1.home 
+net savpek-jogwheel.jog.z.home-signal savpek-jogwheel.jog.z.home <=> halui.joint.2.home 
+
+# Lets map few indicators of joghweel to pyVCP panel.
+net savpek-jogwheel.jog.a.speed-signal => pyvcp.jogwheel-speed
+
+#
+# S620 SPINDLE DRIVE DRIVER!!!
+#
+# Load S620 driver program from directory.
+loadusr -Wn spindle-driver /home/cnc/Desktop/EMC_MACHINE_FILES/s620_ctrl.py
+
+net tool-change-request     iocontrol.0.tool-change       =>  spindle-driver.new-tool-change
+net tool-change-confirmed   iocontrol.0.tool-changed      <=  spindle-driver.tool-changed
+net tool-number             iocontrol.0.tool-prep-number  =>  spindle-driver.new-tool-number
+net spindle-vel-cmd        	=> spindle-driver.set-speed-rpm
