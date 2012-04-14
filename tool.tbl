@@ -1,5 +1,5 @@
-T1 P1 X1 Y1 Z3 D1 ;1/8 end mill 
+T1 P1 X1 Y1 Z1 D1 ;1/8 end mill 
 T2 P2 X1 Y1 Z4 D1 ;1/16 end mill 
 T3 P3 X1 Y1 Z5 D1 ;#7 tap drill 
 T99999 P99999 Z0.1 ;big tool number 
-T5 P8 ;Added 20120107 
+T5 P8 ;added 20120107 
