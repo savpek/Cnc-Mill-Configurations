@@ -97,7 +97,7 @@ Exepted:
 	def set_speed(self, rpm, rpm_old):
 		# If drive HW is currently disabled (safe circuit off)
 		# print message!
-		if self.is_hw_enabled() != True:
+		if self.is_hw_enabled() != True and rpm != 0:
 			easygui.msgbox(msg="""Karamoottorilla ei lupaa olla paalla! Paina turvakytkinta karan kyljesta.""", title=' HUOM!', ok_button='OK')
 		
 		# If speed is > 0, software enable drive.
