@@ -35,9 +35,21 @@ serialPortList = glob.glob("/dev/ttyUSB*");
 serialHook = serial.Serial(serialPortList[0], 38400)
 serialHook.write('U')
 
+def getNewSpeedWithHysteresis(oldSet, currentInputValue):
+	newSpeed = float((currentInputValue*currentInputValue*currentInputValue)/8400)
+	minimumSpeed = 25
+	
+	hysteresisLevel = 20
+	if newSpeed > oldSet+hysteresisLevel:
+		return newSpeed-(newSpeed%hysteresisLevel)+minimumSpeed
+	if newSpeed < oldSet-hysteresisLevel:
+		return newSpeed-(newSpeed%hysteresisLevel)+minimumSpeed
+	return oldSet
+
+currentSpeed = 0
 while 1:
 	serialStr = serialHook.readline()
-
+	
 	if "X+ ON" in serialStr:	#X+ Suunta.
 		print "X+ ON"
 		halc['jog.x.plus'] = 1
@@ -90,8 +102,10 @@ while 1:
 	if "NEWSPEED" in serialStr:	#Haetaan nopeus.
 		newSpeedValue = float(serialStr.rpartition(' ')[2])
 		
-		#Asetetaan nopeuden skaalaus potikalta sopivaksi.
-		halc['jog.speed'] = float(newSpeedValue/256*3000+5)
+		# Asetetaan nopeuden skaalaus potikalta sopivaksi.
+		# Mukaan hystereesia melkoisesti ettei nopeus hypi...
+		currentSpeed = getNewSpeedWithHysteresis(currentSpeed, newSpeedValue)
+		halc['jog.speed'] = currentSpeed
 	
 	# Laitetaan hataseis paalle.
 	if "EMERGENCY_STOP_ON" in serialStr:
