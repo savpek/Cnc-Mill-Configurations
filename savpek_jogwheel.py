@@ -35,16 +35,9 @@ serialPortList = glob.glob("/dev/ttyUSB*");
 serialHook = serial.Serial(serialPortList[0], 38400)
 serialHook.write('U')
 
-def getNewSpeedWithHysteresis(oldSet, currentInputValue):
-	newSpeed = float((currentInputValue*currentInputValue*currentInputValue)/8400)
-	minimumSpeed = 25
-	
-	hysteresisLevel = 20
-	if newSpeed > oldSet+hysteresisLevel:
-		return newSpeed-(newSpeed%hysteresisLevel)+minimumSpeed
-	if newSpeed < oldSet-hysteresisLevel:
-		return newSpeed-(newSpeed%hysteresisLevel)+minimumSpeed
-	return oldSet
+#Jogging speeds (meant to use with switch, not potentiometer eg...)
+minimumSpeed = 25
+topSpeed = 2000
 
 currentSpeed = 0
 while 1:
@@ -102,22 +95,17 @@ while 1:
 	if "NEWSPEED" in serialStr:	#Haetaan nopeus.
 		newSpeedValue = float(serialStr.rpartition(' ')[2])
 		
-		# Asetetaan nopeuden skaalaus potikalta sopivaksi.
-		# Mukaan hystereesia melkoisesti ettei nopeus hypi...
-		currentSpeed = getNewSpeedWithHysteresis(currentSpeed, newSpeedValue)
-		halc['jog.speed'] = currentSpeed
+		if newSpeedValue > 5:
+			halc['jog.speed'] = topSpeed	
+		else:
+			halc['jog.speed'] = minimumSpeed
 	
-	# Laitetaan hataseis paalle.
 	if "EMERGENCY_STOP_ON" in serialStr:
 		halc['jog.estop.reset'] = 0
 		halc['jog.estop.activate'] = 1
-		#halc['jog.machine-on'] = 0
 	
-	# Ja hataseis pois paalta.
 	if "EMERGENCY_STOP_OFF" in serialStr:
 		# Vaihto HALUIssa tapahtuu aina kun signaali vaihtuu
 		# ylos. Nain ollen signaalit pitaa aina nollata.
 		halc['jog.estop.activate'] = 0
 		halc['jog.estop.reset'] = 1
-		#time.sleep(1)
-		#halc['jog.machine-on'] = 1
