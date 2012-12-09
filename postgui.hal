@@ -27,9 +27,6 @@ net savpek-jogwheel.jog.x.home-signal savpek-jogwheel.jog.x.home <=> halui.joint
 net savpek-jogwheel.jog.y.home-signal savpek-jogwheel.jog.y.home <=> halui.joint.1.home 
 net savpek-jogwheel.jog.z.home-signal savpek-jogwheel.jog.z.home <=> halui.joint.2.home 
 
-# Lets map few indicators of joghweel to pyVCP panel.
-net savpek-jogwheel.jog.a.speed-signal => pyvcp.jogwheel-speed
-
 #
 # S620 SPINDLE DRIVE DRIVER!!!
 #
