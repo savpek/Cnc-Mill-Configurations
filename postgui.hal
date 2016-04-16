@@ -1,7 +1,7 @@
 #
 # DIY JOGWHEEL!!!
 #
-loadusr -Wn savpek-jogwheel /home/cnc/Desktop/SHARED/Dropbox/CNCMILL_CONFIG/savpek_jogwheel.py
+loadusr -Wn savpek-jogwheel /home/cnc/Cnc-Mill-Configurations/savpek_jogwheel.py
 
 net savpek-jogwheel.jog.a.speed-signal savpek-jogwheel.jog.speed <=> halui.jog-speed 
 
@@ -31,7 +31,7 @@ net savpek-jogwheel.jog.z.home-signal savpek-jogwheel.jog.z.home <=> halui.joint
 # S620 SPINDLE DRIVE DRIVER!!!
 #
 # Load S620 driver program from directory.
-loadusr -Wn spindle-driver /home/cnc/Desktop/SHARED/Dropbox/CNCMILL_CONFIG/s620_ctrl.py
+loadusr -Wn spindle-driver /home/cnc/Cnc-Mill-Configurations/s620_ctrl.py
 
 net tool-change-request     iocontrol.0.tool-change       =>  spindle-driver.new-tool-change
 net tool-change-confirmed   iocontrol.0.tool-changed      <=  spindle-driver.tool-changed

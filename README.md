@@ -1,4 +1,4 @@
-Cnc-Mill-Configurations
-=======================
-
-Configurations for LINUX CNC (EMC2).
+Before start:
+  sudo apt-get install python-pip
+  sudo pip install pyserial
+  sudo pip install easygui
